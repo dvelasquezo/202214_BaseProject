@@ -59,7 +59,7 @@ describe('ClubService', () => {
   });
 
   it('findOne should throw an exception for an invalid museum', async () => {
-    await expect(() => service.findOne("0")).rejects.toHaveProperty("message", "The club with the given id was not found")
+    await expect(() => service.findOne("0")).rejects.toHaveProperty("message", "El club con el id no ha sido encontrado")
   });
 
   it('create should return a new club', async () => {
@@ -102,7 +102,7 @@ describe('ClubService', () => {
     club = {
       ...club, nombre: "New name", descripcion: "New descripcion"
     }
-    await expect(() => service.update("0", club)).rejects.toHaveProperty("message", "The club with the given id was not found")
+    await expect(() => service.update("0", club)).rejects.toHaveProperty("message", "El club con el id no ha sido encontrado")
   });
 
   it('delete should remove a club', async () => {
@@ -116,7 +116,7 @@ describe('ClubService', () => {
   it('delete should throw an exception for an invalid club', async () => {
     const club: ClubEntity = clubList[0];
     await service.delete(club.id);
-    await expect(() => service.delete("0")).rejects.toHaveProperty("message", "The club with the given id was not found")
+    await expect(() => service.delete("0")).rejects.toHaveProperty("message", "El club con el id no ha sido encontrado")
   });
  
 });

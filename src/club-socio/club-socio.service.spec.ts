@@ -119,8 +119,8 @@ describe('ClubSocioService', () => {
   it('deleteMemberFromClub should remove a member from a club', async () => {
     const socio: SocioEntity = sociosList[0];
     await service.deleteMemberFromClub(
-      socio.id,
       club.id,
+      socio.id,
     );
     const storedClub: ClubEntity =
       await clubRepository.findOne({
