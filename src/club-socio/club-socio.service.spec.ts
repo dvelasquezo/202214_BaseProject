@@ -40,13 +40,13 @@ describe('ClubSocioService', () => {
         await socioRepository.save({
           nombreUsuario: faker.company.name(), 
           correoElectronico: faker.internet.email(), 
-          fechaNacimiento: faker.date.birthdate()
+          fechaNacimiento: faker.date.birthdate().toString()
         });
         sociosList.push(socio);
     }
     club = await clubRepository.save({
       nombre: faker.company.name(), 
-      fechaFundacion: faker.date.past(), 
+      fechaFundacion: faker.date.past().toString(), 
       imagen: faker.image.imageUrl(), 
       descripcion: faker.lorem.sentence(),
       socios: sociosList
@@ -61,14 +61,14 @@ describe('ClubSocioService', () => {
     const newClub: ClubEntity =
       await clubRepository.save({
         nombre: faker.company.name(), 
-        fechaFundacion: faker.date.past(), 
+        fechaFundacion: faker.date.past().toString(), 
         imagen: faker.image.imageUrl(), 
         descripcion: faker.lorem.sentence()
       });
     const newSocio: SocioEntity = await socioRepository.save({
       nombreUsuario: faker.company.name(), 
       correoElectronico: faker.internet.email(), 
-      fechaNacimiento: faker.date.birthdate()
+      fechaNacimiento: faker.date.birthdate().toString()
     });
     const result: ClubEntity =
       await service.addMemberToClub(
@@ -105,7 +105,7 @@ describe('ClubSocioService', () => {
       await socioRepository.save({
         nombreUsuario: faker.company.name(), 
         correoElectronico: faker.internet.email(), 
-        fechaNacimiento: faker.date.birthdate()
+        fechaNacimiento: faker.date.birthdate().toString()
       });
     const updatedClub: ClubEntity =
       await service.updateMembersFromClub(club.id, [

@@ -30,7 +30,7 @@ describe('ClubService', () => {
     for(let i = 0; i < 5; i++){
         const club: ClubEntity = await repository.save({
         nombre: faker.company.name(), 
-        fechaFundacion: faker.date.past(), 
+        fechaFundacion: faker.date.past().toString(), 
         imagen: faker.image.imageUrl(), 
         descripcion: faker.lorem.sentence()
       })
@@ -66,7 +66,7 @@ describe('ClubService', () => {
     const club: ClubEntity = {
       id: "",
       nombre: faker.company.name(), 
-      fechaFundacion: faker.date.past(), 
+      fechaFundacion: faker.date.past().toString(), 
       imagen: faker.image.imageUrl(), 
       descripcion: faker.lorem.sentence(),
       socios: [],
