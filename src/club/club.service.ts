@@ -12,6 +12,13 @@ export class ClubService {
         @InjectRepository(ClubEntity)
         private readonly clubRepository: Repository<ClubEntity>
     ){}
+
+    async validarLimiteDescripcion(descripcion: string): Promise<boolean> {
+      if (descripcion.length < 100)
+        return true;
+      return false;
+    }  
+
     async findAll(): Promise<ClubEntity[]> {
         return await this.clubRepository.find({ relations: ["socios"] });
     }
@@ -25,14 +32,20 @@ export class ClubService {
     }
 
     async create(club: ClubEntity): Promise<ClubEntity> {
-        return await this.clubRepository.save(club);
+      if(await this.validarLimiteDescripcion(club.descripcion) == false)
+        throw new BusinessLogicException("La descripcion supera el limite de caracteres", BusinessError.PRECONDITION_FAILED);
+      return await this.clubRepository.save(club);
     }
 
     async update(id: string, club: ClubEntity): Promise<ClubEntity> {
         const persistedClub: ClubEntity = await this.clubRepository.findOne({where:{id}});
+
+        if(await this.validarLimiteDescripcion(club.descripcion) == false)
+          throw new BusinessLogicException("La descripcion supera el limite de caracteres", BusinessError.PRECONDITION_FAILED);
+
         if (!persistedClub)
           throw new BusinessLogicException("El club con el id no ha sido encontrado", BusinessError.NOT_FOUND);
-        
+
         return await this.clubRepository.save(club);
     }
 
