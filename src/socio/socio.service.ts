@@ -12,6 +12,13 @@ export class SocioService {
         @InjectRepository(SocioEntity)
         private readonly socioRepository: Repository<SocioEntity>
     ){}
+
+    async validarCorreoElectronico(correoElectronico: string): Promise<boolean> {
+      if (correoElectronico.includes('@'))
+        return true;
+      return false;
+    }
+
     async findAll(): Promise<SocioEntity[]> {
         return await this.socioRepository.find({ relations: ["clubes"] });
     }
@@ -25,15 +32,19 @@ export class SocioService {
     }
 
     async create(socio: SocioEntity): Promise<SocioEntity> {
+        if(await this.validarCorreoElectronico(socio.correoElectronico) == false)
+          throw new BusinessLogicException("El correo electronico no tiene @", BusinessError.PRECONDITION_FAILED);
         return await this.socioRepository.save(socio);
     }
 
     async update(id: string, socio: SocioEntity): Promise<SocioEntity> {
-        const persistedSocio: SocioEntity = await this.socioRepository.findOne({where:{id}});
-        if (!persistedSocio)
-          throw new BusinessLogicException("El socio con el id no ha sido encontrado", BusinessError.NOT_FOUND);
-        
-        return await this.socioRepository.save(socio);
+      if(await this.validarCorreoElectronico(socio.correoElectronico) == false)
+        throw new BusinessLogicException("El correo electronico no tiene @", BusinessError.PRECONDITION_FAILED);
+      const persistedSocio: SocioEntity = await this.socioRepository.findOne({where:{id}});
+      if (!persistedSocio)
+        throw new BusinessLogicException("El socio con el id no ha sido encontrado", BusinessError.NOT_FOUND);
+      
+      return await this.socioRepository.save(socio);
     }
 
     async delete(id: string) {
