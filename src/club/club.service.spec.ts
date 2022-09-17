@@ -58,7 +58,7 @@ describe('ClubService', () => {
     expect(club.descripcion).toEqual(storedClub.descripcion)
   });
 
-  it('findOne should throw an exception for an invalid museum', async () => {
+  it('findOne should throw an exception for an invalid club', async () => {
     await expect(() => service.findOne("0")).rejects.toHaveProperty("message", "El club con el id no ha sido encontrado")
   });
 
@@ -109,8 +109,8 @@ describe('ClubService', () => {
     const club: ClubEntity = clubList[0];
     await service.delete(club.id);
   
-    const deletedMuseum: ClubEntity = await repository.findOne({ where: { id: club.id } })
-    expect(deletedMuseum).toBeNull();
+    const deletedClub: ClubEntity = await repository.findOne({ where: { id: club.id } })
+    expect(deletedClub).toBeNull();
   });
 
   it('delete should throw an exception for an invalid club', async () => {

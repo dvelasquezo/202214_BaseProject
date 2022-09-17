@@ -47,7 +47,7 @@ describe('SocioService', () => {
     expect(socios).toHaveLength(socioList.length);
   });
 
-  it('findOne should return a socio by id', async () => {
+  it('findOne should return a member by id', async () => {
     const storedSocio: SocioEntity = socioList[0];
     const socio: SocioEntity = await service.findOne(storedSocio.id);
     expect(socio).not.toBeNull();
@@ -56,11 +56,11 @@ describe('SocioService', () => {
     expect(socio.fechaNacimiento).toEqual(storedSocio.fechaNacimiento)
   });
 
-  it('findOne should throw an exception for an invalid museum', async () => {
+  it('findOne should throw an exception for an invalid member', async () => {
     await expect(() => service.findOne("0")).rejects.toHaveProperty("message", "El socio con el id no ha sido encontrado")
   });
 
-  it('create should return a new socio', async () => {
+  it('create should return a new member', async () => {
     const socio: SocioEntity = {
       id: "",
       nombreUsuario: faker.company.name(), 
@@ -79,7 +79,7 @@ describe('SocioService', () => {
     expect(storedSocio.fechaNacimiento).toEqual(newSocio.fechaNacimiento)
   });
 
-  it('update should modify a socio', async () => {
+  it('update should modify a member', async () => {
     const socio: SocioEntity = socioList[0];
     socio.nombreUsuario = "New nombre";
     socio.correoElectronico = "test@test.com";
@@ -93,7 +93,7 @@ describe('SocioService', () => {
     expect(storedSocio.correoElectronico).toEqual(socio.correoElectronico)
   });
  
-  it('update should throw an exception for an invalid socio', async () => {
+  it('update should throw an exception for an invalid member', async () => {
     let socio: SocioEntity = socioList[0];
     socio = {
       ...socio, nombreUsuario: "New nombre", correoElectronico: "test@test.com"
@@ -101,15 +101,15 @@ describe('SocioService', () => {
     await expect(() => service.update("0", socio)).rejects.toHaveProperty("message", "El socio con el id no ha sido encontrado")
   });
 
-  it('delete should remove a socio', async () => {
+  it('delete should remove a member', async () => {
     const socio: SocioEntity = socioList[0];
     await service.delete(socio.id);
   
-    const deletedMuseum: SocioEntity = await repository.findOne({ where: { id: socio.id } })
-    expect(deletedMuseum).toBeNull();
+    const deletedMember: SocioEntity = await repository.findOne({ where: { id: socio.id } })
+    expect(deletedMember).toBeNull();
   });
 
-  it('delete should throw an exception for an invalid socio', async () => {
+  it('delete should throw an exception for an invalid member', async () => {
     const socio: SocioEntity = socioList[0];
     await service.delete(socio.id);
     await expect(() => service.delete("0")).rejects.toHaveProperty("message", "El socio con el id no ha sido encontrado")

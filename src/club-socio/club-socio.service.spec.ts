@@ -88,6 +88,49 @@ describe('ClubSocioService', () => {
     expect(socios.length).toBe(5);
   });
 
+  it('findMembersFromClub should throw an exception for an invalid member', async () => {
+    await expect(() =>
+      service.findMemberFromClub(
+        '0',
+        club.id,
+      ),
+    ).rejects.toHaveProperty(
+      'message',
+      'El socio con el id no ha sido encontrado',
+    );
+  });
+
+  it('findMemberFromClub should throw an exception for an invalid club', async () => {
+    const socio: SocioEntity = sociosList[0];
+    await expect(() =>
+      service.findMemberFromClub(
+        socio.id,
+        '0',
+      ),
+    ).rejects.toHaveProperty(
+      'message',
+      'El club con el id no ha sido encontrado',
+    );
+  });
+
+  it('findMemberFromClub should throw an exception for a member not associated to a club', async () => {
+    const newSocio: SocioEntity =
+      await socioRepository.save({
+        nombreUsuario: faker.company.name(), 
+        correoElectronico: faker.internet.email(), 
+        fechaNacimiento: faker.date.birthdate().toString()
+      });
+    await expect(() =>
+      service.findMemberFromClub(
+        newSocio.id,
+        club.id,
+      ),
+    ).rejects.toHaveProperty(
+      'message',
+      'El socio con el id no esta asociado al club',
+    );
+  });
+
   it('findMemberFromClub should return member from club', async () => {
     const socio: SocioEntity = sociosList[0];
     const storedSocio: SocioEntity =
@@ -116,6 +159,34 @@ describe('ClubSocioService', () => {
     expect(updatedClub.socios[0].correoElectronico).toBe(newSocio.correoElectronico);
   });
 
+  it('updateMembersFromClub should throw an exception for an invalid club', async () => {
+    const newSocio: SocioEntity =
+      await socioRepository.save({
+        nombreUsuario: faker.company.name(), 
+        correoElectronico: faker.internet.email(), 
+        fechaNacimiento: faker.date.birthdate().toString()
+      });
+    await expect(() =>
+      service.updateMembersFromClub('0', [newSocio]),
+    ).rejects.toHaveProperty(
+      'message',
+      'El club con el id no ha sido encontrado',
+    );
+  });
+
+  it('updateMembersFromClub should throw an exception for an invalid member', async () => {
+    const socio: SocioEntity = sociosList[0];
+    socio.id = '0';
+    await expect(() =>
+      service.updateMembersFromClub(club.id, [
+        socio,
+      ]),
+    ).rejects.toHaveProperty(
+      'message',
+      'El socio con el id no ha sido encontrado',
+    );
+  });
+
   it('deleteMemberFromClub should remove a member from a club', async () => {
     const socio: SocioEntity = sociosList[0];
     await service.deleteMemberFromClub(
@@ -129,5 +200,33 @@ describe('ClubSocioService', () => {
       });
     const deletedMember: SocioEntity = storedClub.socios.find((a) => a.id === socio.id);
     expect(deletedMember).toBeUndefined();
+  });
+
+  it('deleteMemberFromClub should thrown an exception for an invalid club', async () => {
+    const socio: SocioEntity = sociosList[0];
+    await expect(() =>
+      service.deleteMemberFromClub('0', socio.id),
+    ).rejects.toHaveProperty(
+      'message',
+      'El club con el id no ha sido encontrado',
+    );
+  });
+
+  it('deleteMemberFromClub should thrown an exception for an non asocciated member', async () => {
+    const newSocio: SocioEntity =
+      await socioRepository.save({
+        nombreUsuario: faker.company.name(), 
+        correoElectronico: faker.internet.email(), 
+        fechaNacimiento: faker.date.birthdate().toString()
+      });
+    await expect(() =>
+      service.deleteMemberFromClub(
+        club.id,
+        newSocio.id,
+      ),
+    ).rejects.toHaveProperty(
+      'message',
+      'El socio con el id no esta asociado al club',
+    );
   });
 });
