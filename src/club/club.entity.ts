@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { SocioEntity } from 'src/socio/socio.entity';
+import { SocioEntity } from '../socio/socio.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany,JoinTable } from 'typeorm';
 
 @Entity()
@@ -11,7 +11,7 @@ export class ClubEntity {
  nombre: string;
  
  @Column()
- fechaFundacion: string;
+ fechaFundacion: Date;
  
  @Column()
  imagen: string;
